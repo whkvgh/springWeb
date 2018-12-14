@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="board">
+	<resultMap type="board" id="boardResult">
+		<id property="seq" column="SEQ" />
+		<result property="title" column="TITLE" />
+		<result property="writer" column="WRITER" />
+		<result property="content" column="CONTENT" />
+		<result property="regdate" column="REGDATE" />
+		<result property="cnt" column="CNT" />
+	</resultMap>
+
+	<!-- 조회 -->
+	<select id="getCount" resultType="int">
+		SELECT COUNT(*)
+		FROM BOARD
+		<if test="searchKeyword != null and searchKeyword != ''">
+			WHERE ${searchCondition} like '%' || #{searchKeyword} ||
+			'%'
+		</if>
+</select>
+
+		<select id="getBoardList" resultMap="boardResult"><!-- 컬럼명이 다를경우 maping 해서 값을 
+				넘겨줘야된다 -->
+			select b.* from (select a.*, rownum rn from (
+			SELECT SEQ,
+			TITLE,
+			WRITER,
+			CONTENT,
+			REGDATE,
+			CNT
+			FROM BOARD
+
+			<if test="searchKeyword != null and searchKeyword != ''">
+				WHERE ${searchCondition} like '%' || #{searchKeyword} ||
+				'%'
+			</if>
+			<!-- <where> <choose> <when test="searchCondition != null and searchCondition 
+				== 'title'"> and title like '%' || #{searchKeyword} || '%' </when> <when 
+				test="searchCondition != null and searchCondition == 'content'"> and content 
+				like '%' || #{searchKeyword} || '%' </when> </choose> </where> -->
+			<!-- <where> <if test="searchCondition != null and searchCondition == 
+				'title'" > and title like '%' || #{searchKeyword} || '%' </if> <if test="searchCondition 
+				!= null and searchCondition == 'content'"> and content like '%' || #{searchKeyword} 
+				|| '%' </if> </where> -->
+			<choose><!-- 정렬기준 -->
+				<when test="sortCol != null and sortCol !=''">
+					ORDER BY ${sortCol}
+				</when>
+				<otherwise>
+					ORDER BY SEQ DESC
+				</otherwise>
+
+			</choose>
+			) a) b where rn between #{first} and #{last}
+			<!-- <, > 쓰면 에러 뜸 그래서 c data로 묶어서 표현 -->
+		</select>
+
+		<!-- 입력 -->
+		<insert id="insertBoard" parameterType="board">
+			<selectKey keyProperty="seq" resultType="integer"
+				order="BEFORE">
+				SELECT NVL(MAX(SEQ),0)+1 FROM BOARD
+			</selectKey>
+			INSERT INTO BOARD(SEQ, TITLE, WRITER, CONTENT, REGDATE, CNT
+			<if test="uploadFileName !=null and uploadFileName !=''">,uploadFileName
+			</if>
+			)
+			VALUES(#{seq}, #{title}, #{writer}, #{content}, sysdate, 0
+			<if test="uploadFileName !=null and uploadFileName !=''">, #{uploadFileName}
+			</if>
+			)
+
+		</insert>
+
+		<!-- 선택 삭제 : mynatis에 int값이 넘어와서 type이랑 sql 문도 변경 -->
+		<delete id="deleteBoardList" parameterType="board">
+			DELETE BOARD
+			<if test="seqlist != null and seqlist.length>0">
+				WHERE SEQ IN
+				<foreach collection="seqlist" item="item" open="(" close=")"
+					separator=",">
+					#{item}
+				</foreach>
+			</if>
+			<if test="seqlist == null or not seqlist.length=0"> where seq=-1</if>
+		</delete>
+
+		<!-- 삭제 -->
+		<delete id="deleteBoard" parameterType="board">
+			DELETE BOARD WHRER SEQ=#{seq}
+
+		</delete>
+
+		<!-- 수정 -->
+		<update id="updateBoard" parameterType="board">
+			UPDATE BOARD SET TITLE=
+			#{title}, CONTENT = #{content} WHERE SEQ= #{seq}
+		</update>
+
+		<!-- 단건 조회 -->
+		<select id="getBoard" parameterType="board" resultType="board">
+			SELECT
+			SEQ,
+			TITLE,
+			WRITER,
+			CONTENT,
+			REGDATE,
+			CNT,
+			UPLOADFILENAME
+			FROM BOARD
+			WHERE SEQ = #{seq}
+		</select>
+</mapper> 

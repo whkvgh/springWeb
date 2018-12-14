@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="comments">
+
+	<select id="getCommentsList" resultType="comments" parameterType="comments"> 
+		SELECT A.* FROM ( SELECT B.*, ROWNUM RN FROM ( 
+		SELECT SEQ            
+			   ,NAME         
+			   ,CONTENT      
+			   ,BOARD_SEQ
+			   ,REGDATE
+		  FROM COMMENTS  
+		 WHERE BOARD_SEQ = #{boardSeq}
+		  <if test="seq != null and seq != ''">
+		  <![CDATA[ 
+		  	and seq > #{seq}
+		  ]]>
+		  </if>
+		 ORDER BY SEQ DESC 
+		 ) B ) A
+		  <![CDATA[ 
+		 WHERE RN <= #{pageUnit}
+		 ]]>
+	</select>
+	
+		<select id="getComments" resultType="comments" parameterType="comments"> 
+		SELECT SEQ            
+			   ,NAME         
+			   ,CONTENT      
+			   ,BOARD_SEQ
+			   ,REGDATE
+		  FROM COMMENTS  
+		 WHERE seq = #{seq}
+	</select>
+	
+	<insert id="insertComments" parameterType="comments">
+		<selectKey keyProperty="seq" resultType="string" order="BEFORE">
+			select nvl(max(seq),0)+1 from comments
+		</selectKey>
+		INSERT INTO COMMENTS(
+				  SEQ  
+				, NAME
+				, CONTENT
+				, BOARD_SEQ
+				, REGDATE
+				) 
+			VALUES(
+				  #{seq}
+				, #{name}
+				, #{content}
+				, #{boardSeq}
+				, SYSDATE
+				
+				)
+	</insert>
+	
+	<update id="updateComments" parameterType="comments">
+		update  COMMENTS SET 
+				name = #{name}
+			    ,content = #{content} 
+	     where  seq = #{seq}
+	</update>
+	
+	<delete id="deleteComments" parameterType="comments">
+		delete COMMENTS 
+		 <where> 
+		 	<choose>
+		 		<when test="boardSeq != null and boardSeq != ''">
+		 			boardSeq = #{boardSeq}	
+		 		</when>
+		 		<otherwise>
+		 			seq = #{seq}
+		 		</otherwise>
+		 	</choose>
+		 </where>
+	</delete>
+
+</mapper>
