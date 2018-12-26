@@ -19,10 +19,10 @@ public class Boardvo {
 	private MultipartFile uploadFile;
 	private String uploadFileName;
 	
+
 	//페이징 처리
 	private int First;
 	private int Last;
-	
 	
 
 	public int getFirst() {

@@ -64,7 +64,7 @@
 			<tr>
 				<td><input type="checkbox" name="seqlist" value="${board.seq}"></td>
 				<td>${board.seq}</td>
-				<td><a href="./getBoard?seq=${board.seq}">${board.title}</td>
+				<td><a href="./getBoard?seq=${board.seq}">${board.title}</a></td>
 				<td>${board.content}</td>
 				<td>${board.writer}</td>
 				<td>${board.regdate}</td>
