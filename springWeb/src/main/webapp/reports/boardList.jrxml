@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.5.1.final using JasperReports Library version 6.5.1  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="boardList" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e93af5b0-7a67-46fa-a774-b7043090f733">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter "/>
+	<style name="koreafont" pdfFontName="fonts/malgun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+	<queryString language="SQL">
+		<![CDATA[select seq  as "seq",
+		title as "title",
+		to_char(regdate, 'YYYY/DD/MM') as "regdate",
+		writer as "writer",
+		cnt as "cnt"
+from board
+order by seq desc]]>
+	</queryString>
+	<field name="seq" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="seq"/>
+	</field>
+	<field name="title" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="title"/>
+	</field>
+	<field name="regdate" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="regdate"/>
+	</field>
+	<field name="writer" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="writer"/>
+	</field>
+	<field name="cnt" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="cnt"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement style="koreafont" x="230" y="40" width="109" height="20" uuid="28f6f6cc-9e08-425f-afd4-aac0009117f6"/>
+				<text><![CDATA[게시판 목록]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement style="koreafont" x="-1" y="30" width="111" height="30" uuid="525f4905-224e-46e6-9bb5-ed35ce0eb7ee">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ae45a5bc-1b11-42c2-9d62-3d0ba153e41a"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[seq]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="koreafont" x="110" y="30" width="111" height="30" uuid="8360fc22-a7d7-4f2e-af68-7dbf3cbca0e5">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1b2bfc54-e919-481c-8393-e55a81f7411a"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[title]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="koreafont" x="221" y="30" width="111" height="30" uuid="1d23e179-59f0-49e7-9a94-95f875f6d04a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e0af52e3-860a-4447-a87c-d0fc89cf9144"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[regdate]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="koreafont" x="332" y="30" width="111" height="30" uuid="451f8a7f-362f-4289-b125-319f6405eb6e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a28fb130-ca93-4b69-bcae-faf159ca93d4"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[writer]]></text>
+			</staticText>
+			<staticText>
+				<reportElement style="koreafont" x="443" y="30" width="111" height="30" uuid="37ff63e8-318c-405b-886c-af4aa0f9323e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="94225aa4-410e-4253-a24d-77b6d3b40f7e"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[cnt]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="37" splitType="Stretch">
+			<textField>
+				<reportElement style="koreafont" x="0" y="0" width="111" height="30" uuid="308b472c-4722-48fb-928a-dd6f25f8aa47">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ae45a5bc-1b11-42c2-9d62-3d0ba153e41a"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.0" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{seq}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="koreafont" x="111" y="0" width="111" height="30" uuid="6e1fa1f8-d793-4b4e-a426-72b3b6b809be">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1b2bfc54-e919-481c-8393-e55a81f7411a"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.0" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="koreafont" x="222" y="0" width="111" height="30" uuid="35122022-a9ee-426f-9754-37eaa7767984">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e0af52e3-860a-4447-a87c-d0fc89cf9144"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.0" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{regdate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="koreafont" x="333" y="0" width="111" height="30" uuid="1e7459f1-ac6d-4441-8426-2096b0ca6871">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="a28fb130-ca93-4b69-bcae-faf159ca93d4"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.0" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{writer}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement style="koreafont" x="444" y="0" width="111" height="30" uuid="f91dcb59-5727-435b-9cad-59b1456dabb8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="94225aa4-410e-4253-a24d-77b6d3b40f7e"/>
+				</reportElement>
+				<box>
+					<pen lineWidth="1.0" lineColor="#000000"/>
+				</box>
+				<textFieldExpression><![CDATA[$F{cnt}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

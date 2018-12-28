@@ -1,5 +1,7 @@
 package com.company.app.board;
 
+import java.math.BigDecimal;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -8,12 +10,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Boardvo {
 
-	private int seq;
+	private BigDecimal seq;
 	private String title;
 	private String writer;
 	private String content;
 	private String regdate;
-	private int cnt;
+	private BigDecimal cnt;
 
 	//파일 업로드
 	private MultipartFile uploadFile;
@@ -106,11 +108,11 @@ public class Boardvo {
 		this.searchKeyword = searchKeyword;
 	}
 
-	public int getSeq() {
+	public BigDecimal getSeq() {
 		return seq;
 	}
 
-	public void setSeq(int seq) {
+	public void setSeq(BigDecimal seq) {
 		this.seq = seq;
 	}
 
@@ -146,13 +148,13 @@ public class Boardvo {
 		this.regdate = regdate;
 	}
 
-	public int getCnt() {
+	public BigDecimal getCnt() {
 		return cnt;
-	}
-
-	public void setCnt(int cnt) {
+	}     
+   
+	public void setCnt(BigDecimal cnt) {
 		this.cnt = cnt;
-	}
+	}   
 
 	@Override
 	public String toString() {

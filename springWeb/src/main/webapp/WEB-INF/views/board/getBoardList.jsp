@@ -11,6 +11,7 @@
 </head>
 <body>
 <my:userInfo>
+
 <c:if test="${not empty sessionScope.login}">
 <input type ="text" placeholder="id">
 <input type ="text" placeholder="pw">
@@ -24,6 +25,10 @@
 			${sessionScope.login.id}님 <a href="logout">로그아웃</a>
 	</c:if>-->
 	<h3>일반게시판</h3>
+	<hr>
+<input type="button" value="pdf 내려받기" onclick="location.href='./boardreport'"/>
+<input type="button" value="엑셀 내려받기" onclick="location.href='./boardExcel'"/>
+<hr>
 	<!-- <a href="<%=request.getContextPath() %>/insertBoardform">등록</a><br> 페이지 경로 설정-->
 	<a href="${pageContext.request.contextPath}/insertBoard">등록</a>
 	<br>

@@ -23,10 +23,13 @@
 	<mvc:resources mapping="/resources/**"
 		location="/resources/" />
 	<mvc:resources mapping="/images/" location="/images" />
+	
+	<bean p:order="1"
+class="org.springframework.web.servlet.view.BeanNameViewResolver"/>
 
 	<bean
 		class="org.springframework.web.servlet.view.UrlBasedViewResolver"
-		p:order="1"
+		p:order="2"
 		p:viewClass="org.springframework.web.servlet.view.tiles3.TilesView" />
 	<!--Don't add suffix or prefix like you do with .jsp files -->
 	<bean id="tilesConfigurer"
@@ -38,7 +41,7 @@
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources 
 		in the /WEB-INF/views directory -->
-	<bean p:order="2"
+	<bean p:order="3"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/views/" />
 		<property name="suffix" value=".jsp" />

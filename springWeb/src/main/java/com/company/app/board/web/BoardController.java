@@ -5,11 +5,15 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,6 +31,16 @@ import org.springframework.web.servlet.ModelAndView;
 import com.company.app.board.BoardService;
 import com.company.app.board.Boardvo;
 import com.company.app.common.Paging;
+
+import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
 
 @Controller // 클라이언트 요청시 1번으로 실행됨.
 public class BoardController {
@@ -80,8 +94,8 @@ public class BoardController {
 		mv.addObject("paging", paging);
 		mv.addObject("boardList", boardService.getBoardList(vo));
 		mv.setViewName("board/getBoardList");
-		return mv;
-	}
+		return mv;//리턴할때 jsp페이지명을 작성했음.
+		}
 
 	// 단건 조회
 	@RequestMapping("/getBoard") // http://localhost:8081/app/getBoardList
@@ -232,5 +246,63 @@ public class BoardController {
 			printwriter.close();
 		}
 	}
-
+//jrxml 소스-> pdf 출력
+	@RequestMapping("/boardreport")
+	public void report(HttpServletRequest request, HttpServletResponse response, Boardvo vo) throws Exception {
+		try {
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			JasperReport report = JasperCompileManager
+					.compileReport(request.getSession().getServletContext().getRealPath("reports/boardList.jrxml"));//소스파일 지정
+			vo.setFirst(1);
+			vo.setLast(100);
+			JRDataSource JRdataSource = new JRBeanCollectionDataSource(boardService.getBoardList(vo));	//출력할 데이터 넘김
+			JasperPrint print = JasperFillManager.fillReport(report, map, JRdataSource);
+			JRExporter exporter = new JRPdfExporter();
+			OutputStream out;
+			
+			response.reset();
+			out = response.getOutputStream();
+			exporter.setParameter(JRExporterParameter.OUTPUT_FILE_NAME, "report3.pdf");
+			exporter.setParameter(JRExporterParameter.JASPER_PRINT, print);
+			exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, out);	//pdf 다운
+			exporter.exportReport();	//pdf 파일 생성됨
+			out.flush();
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	//엑셀출력
+	@RequestMapping("/boardExcel")
+	public ModelAndView excelView(Boardvo vo, HttpServletResponse response) throws IOException{
+		ArrayList<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+	Map<String, Object> map = new HashMap<String, Object>();
+	
+	map =new HashMap<String, Object>();
+	map.put("title", "제목1");
+	map.put("cnt", 10);
+	map.put("writer", "안녕");
+	list.add(map);
+	
+	map =new HashMap<String, Object>();
+	map.put("title", "제목2");
+	map.put("cnt", 9);
+	map.put("writer", "하이");
+	list.add(map);
+	
+	map =new HashMap<String, Object>();
+	map.put("title", "제목3");
+	map.put("cnt", 8);
+	map.put("writer", "잘가");
+	list.add(map);
+	
+	HashMap<String, Object> emap =  new HashMap<String, Object>();
+	String[] header= {"writer", "title"	};
+	emap.put("header", header);
+	emap.put("filename", "excel_dept");
+	emap.put("datas", list);
+	return new ModelAndView("commonExcelView", emap);
+	}
 }
